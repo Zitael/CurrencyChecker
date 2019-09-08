@@ -12,5 +12,5 @@ public class XBTUSDModelLite {
     @JsonProperty(value = "timestamp")
     private String timestamp;
     @JsonProperty(value = "midPrice")
-    private Float price;
+    private float price;
 }

@@ -20,7 +20,7 @@ public class XBTUSDModel {
     @Column(name = "prev_price")
     private float prevPrice;
     @Column(name = "delta")
-    private int delta;
+    private float delta;
     @Column(name = "last_price")
     private float lastPrice;
     @Column(name = "increased")
