@@ -1,0 +1,14 @@
+spring:
+  jackson:
+    default-property-inclusion: non_null
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/BitMex"
+    username: "postgres"
+    password: "me"
+  jpa:
+    show-sql: false
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  flyway:
+    enabled: true
