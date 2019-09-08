@@ -1,6 +1,5 @@
 package ru.alexandrov.currencychecker.service;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.alexandrov.currencychecker.dao.model.XBTUSDModel;
@@ -15,7 +14,7 @@ public class XBTUSDService {
     private final XBTUSDRepository repository;
     private float prevPrice;
 
-    public XBTUSDModel saveToDB(String symbol, float price){
+    public XBTUSDModel saveToDB(String symbol, float price) {
         XBTUSDModelLite lite = new XBTUSDModelLite();
         lite.setSymbol(symbol);
         lite.setPrice(price);
@@ -32,7 +31,7 @@ public class XBTUSDService {
             prevPrice = lite.getPrice();
         }
         result.setLastPrice(lite.getPrice());
-        result.setDelta(Math.abs((int) (result.getLastPrice()-result.getPrevPrice())));
+        result.setDelta(Math.abs((int) (result.getLastPrice() - result.getPrevPrice())));
         if (result.getLastPrice() > result.getPrevPrice()) result.setIncreased(1);
         else result.setIncreased(0);
         return result;

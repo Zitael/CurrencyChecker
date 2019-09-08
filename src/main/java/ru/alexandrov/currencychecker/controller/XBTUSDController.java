@@ -1,6 +1,5 @@
 package ru.alexandrov.currencychecker.controller;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,8 +11,6 @@ import ru.alexandrov.currencychecker.dao.model.XBTUSDModelLite;
 import ru.alexandrov.currencychecker.dao.repository.XBTUSDRepository;
 import ru.alexandrov.currencychecker.service.XBTUSDService;
 
-import java.awt.print.Pageable;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -29,13 +26,15 @@ public class XBTUSDController {
         Page<XBTUSDModel> results = repository.findAll(new PageRequest(0, n, Sort.Direction.DESC, "id"));
         return results.getContent();
     }
+
     @GetMapping(value = "/getFiltered")
     @ResponseBody
     List<XBTUSDModel> getFilteredByDelta(@RequestParam(value = "delta", defaultValue = "1", required = false) int delta) throws Exception {
         return repository.findAllByDeltaAfter(delta);
     }
+
     @PostMapping(value = "/putToBase")
-    ResponseEntity<XBTUSDModel> putToBase(@RequestBody XBTUSDModelLite lite){
+    ResponseEntity<XBTUSDModel> putToBase(@RequestBody XBTUSDModelLite lite) {
         XBTUSDModel result = service.saveToDB(lite.getSymbol(), lite.getPrice());
         return ResponseEntity.ok(result);
     }
