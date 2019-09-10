@@ -17,13 +17,13 @@ public class XBTUSDController {
 
     @GetMapping(value = "/getLast")
     @ResponseBody
-    List<XBTUSDModel> getLast(@RequestParam(value = "n", defaultValue = "1", required = false) int n) {
+    List getLast(@RequestParam(value = "n", defaultValue = "1", required = false) int n) {
         return service.getLastN(n);
     }
 
     @GetMapping(value = "/getFiltered")
     @ResponseBody
-    List<XBTUSDModel> getFilteredByDelta(@RequestParam(value = "delta", defaultValue = "1", required = false) float delta) {
+    List getFilteredByDelta(@RequestParam(value = "delta", defaultValue = "1", required = false) float delta) {
         return service.getFilteredByDelta(delta);
     }
 
