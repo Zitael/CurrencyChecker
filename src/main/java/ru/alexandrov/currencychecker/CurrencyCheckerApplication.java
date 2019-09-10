@@ -6,10 +6,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 @SpringBootApplication
-public class CurrencycheckerApplication {
+public class CurrencyCheckerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CurrencycheckerApplication.class, args);
+        SpringApplication.run(CurrencyCheckerApplication.class, args);
     }
 
 }

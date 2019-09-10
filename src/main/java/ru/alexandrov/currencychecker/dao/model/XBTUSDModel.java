@@ -10,19 +10,19 @@ import javax.persistence.*;
 public class XBTUSDModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Basic
     private Long id;
 
-    @Column(name = "timestamp")
+    @Basic
     private String timestamp;
-    @Column(name = "currency")
+    @Basic
     private String currency;
     @Column(name = "prev_price")
     private float prevPrice;
-    @Column(name = "delta")
+    @Basic
     private float delta;
     @Column(name = "last_price")
     private float lastPrice;
-    @Column(name = "increased")
+    @Basic
     private int increased;
 }
