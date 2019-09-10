@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 public interface XBTUSDRepository extends JpaRepository<XBTUSDModel, Long> {
     List<XBTUSDModel> findAllByDeltaAfter(float delta);
-    XBTUSDModel findFirstByOrderByIdDesc();
+    XBTUSDModel findFirstByCurrencyOrderByIdDesc(String currency);
 }

@@ -15,19 +15,19 @@ import java.util.List;
 public class XBTUSDController {
     private final XBTUSDService service;
 
-    @GetMapping(value = "/getLast")
+    @GetMapping(value = "/lastNotes")
     @ResponseBody
-    List getLast(@RequestParam(value = "n", defaultValue = "1", required = false) int n) {
-        return service.getLastN(n);
+    ResponseEntity<List> getLast(@RequestParam(value = "n", defaultValue = "1", required = false) int n) {
+        return ResponseEntity.ok(service.getLastN(n));
     }
 
-    @GetMapping(value = "/getFiltered")
+    @GetMapping(value = "/filteredNotes")
     @ResponseBody
-    List getFilteredByDelta(@RequestParam(value = "delta", defaultValue = "1", required = false) float delta) {
-        return service.getFilteredByDelta(delta);
+    ResponseEntity<List> getFilteredByDelta(@RequestParam(value = "delta", defaultValue = "1", required = false) float delta) {
+        return ResponseEntity.ok(service.getFilteredByDelta(delta));
     }
 
-    @PostMapping(value = "/putToBase")
+    @PostMapping(value = "/newNote")
     ResponseEntity<XBTUSDModel> putToBase(@RequestBody XBTUSDModelLite lite) {
         XBTUSDModel result = (XBTUSDModel) service.saveToDB(lite.getSymbol(), lite.getPrice());
         return ResponseEntity.ok(result);

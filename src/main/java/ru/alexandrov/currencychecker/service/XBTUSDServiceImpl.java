@@ -33,9 +33,9 @@ public class XBTUSDServiceImpl implements XBTUSDService<XBTUSDModel> {
 
     private XBTUSDModel convertFromLiteToModel(XBTUSDModelLite lite) {
         XBTUSDModel result = new XBTUSDModel();
-        XBTUSDModel last = repository.findFirstByOrderByIdDesc();
+        XBTUSDModel last = repository.findFirstByCurrencyOrderByIdDesc(lite.getSymbol());
         result.setTimestamp(LocalDateTime.now().toString());
-        result.setCurrency("XBTUSD");
+        result.setCurrency(lite.getSymbol());
         result.setPrevPrice(last == null ? 0 : last.getLastPrice());
         result.setLastPrice(lite.getPrice());
         result.setDelta(Math.abs((int) (result.getLastPrice() - result.getPrevPrice())));
