@@ -29,7 +29,7 @@ public class XBTUSDController {
 
     @PostMapping(value = "/putToBase")
     ResponseEntity<XBTUSDModel> putToBase(@RequestBody XBTUSDModelLite lite) {
-        XBTUSDModel result = service.saveToDB(lite.getSymbol(), lite.getPrice());
+        XBTUSDModel result = (XBTUSDModel) service.saveToDB(lite.getSymbol(), lite.getPrice());
         return ResponseEntity.ok(result);
     }
 }
