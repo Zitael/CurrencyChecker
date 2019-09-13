@@ -1,6 +1,8 @@
 package ru.alexandrov.currencychecker.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,9 @@ public class PairsServiceImpl implements PairsService<PairsModel> {
     private final PairsRepository repository;
 
     public List<PairsModel> getLastN(String symbol, int count) {
-        return repository.findAllByCurrency(symbol.toUpperCase(), new PageRequest(0, count, Sort.Direction.DESC, "id")).getContent();
+        PageRequest pageRequest = new PageRequest(0, count, Sort.Direction.DESC, "id");
+        Page<PairsModel> page = repository.findAllByCurrency(symbol.toUpperCase(), pageRequest);
+        return page.getContent();
     }
 
     public List<PairsModel> getFilteredByDelta(String symbol, float delta) {

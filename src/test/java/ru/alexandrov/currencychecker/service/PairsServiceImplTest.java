@@ -3,12 +3,12 @@ package ru.alexandrov.currencychecker.service;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.alexandrov.currencychecker.dao.model.PairsModel;
 import ru.alexandrov.currencychecker.dao.repository.PairsRepository;
@@ -17,49 +17,63 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 public class PairsServiceImplTest {
     @Mock
     private PairsRepository repository;
-    @Autowired
-    private PairsService service;
+    @InjectMocks
+    private PairsServiceImpl service;
 
     @Before
-    public void setUp() throws Exception {
-        PairsModel model1 = new PairsModel();
-        model1.setLastPrice(1);
-        PairsModel model2 = new PairsModel();
-        model1.setLastPrice(2);
-        PairsModel model3 = new PairsModel();
-        model1.setLastPrice(3);
-        List<PairsModel> list1 = new ArrayList<>();
-        list1.add(model1);
-        list1.add(model2);
-        List<PairsModel> list2 = new ArrayList<>();
-        list2.add(model3);
-
-        when(repository.findAllByCurrency("1", new PageRequest(0, 1, Sort.Direction.DESC, "id")))
-                .thenReturn((Page) list1);
-        when(repository.findFirstByCurrencyOrderByIdDesc("2")).thenReturn(model1);
-        when(repository.findAllByCurrencyAndDeltaAfter("1", 2)).thenReturn(list2);
+    public void setUp(){
     }
 
     @Test
     public void getLastN() {
-        List result = service.getLastN("1", 1);
+        List<PairsModel> list = new ArrayList<>();
+        list.add(new PairsModel());
+        list.add(new PairsModel());
+        Page<PairsModel> page = new PageImpl<>(list);
+
+        when(repository.findAllByCurrency(any(String.class), any(PageRequest.class))).thenReturn(page);
+
+        List result = service.getLastN("1", 2);
+
+        verify(repository, atLeastOnce()).findAllByCurrency(any(), any());
         assertEquals(2, result.size());
     }
 
     @Test
     public void getFilteredByDelta() {
+        List<PairsModel> list = new ArrayList<>();
+        list.add(new PairsModel());
+        list.add(new PairsModel());
+
+        when(repository.findAllByCurrencyAndDeltaAfter(any(), anyFloat())).thenReturn(list);
+
+        List result = service.getFilteredByDelta("1", 1);
+
+        verify(repository, atLeastOnce()).findAllByCurrencyAndDeltaAfter(any(), anyFloat());
+        assertEquals(2, result.size());
     }
 
     @Test
     public void saveToDB() {
+        PairsModel last = new PairsModel();
+        last.setLastPrice(1);
 
+        when(repository.findFirstByCurrencyOrderByIdDesc("1")).thenReturn(last);
+        when(repository.save(any(PairsModel.class))).then(returnsFirstArg());
+
+        PairsModel model = service.saveToDB("1", 2);
+
+        verify(repository, atLeastOnce()).findFirstByCurrencyOrderByIdDesc(any());
+        assertNotNull(model);
+        assertEquals(last.getLastPrice(), model.getPrevPrice(), 0.0);
     }
 }
