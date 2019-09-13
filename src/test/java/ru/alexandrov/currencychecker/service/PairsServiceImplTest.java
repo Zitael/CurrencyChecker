@@ -30,7 +30,7 @@ public class PairsServiceImplTest {
     private PairsServiceImpl service;
 
     @Before
-    public void setUp(){
+    public void setUp() {
     }
 
     @Test
