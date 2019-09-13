@@ -5,11 +5,11 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "BTCUSD")
+@Table(name = "Pairs")
 @Data
-public class XBTUSDModel {
+public class PairsModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic
     private Long id;
 
