@@ -1,12 +1,14 @@
 package ru.alexandrov.currencychecker.dao.model;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Pairs")
 @Data
+@Accessors(chain = true)
 public class PairsModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

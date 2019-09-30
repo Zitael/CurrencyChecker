@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.alexandrov.currencychecker.dao.model.BoxPlotData;
 import ru.alexandrov.currencychecker.dao.model.PairsModel;
+import ru.alexandrov.currencychecker.dao.model.PairsModelLite;
 import ru.alexandrov.currencychecker.service.PairsService;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 public class PairsController {
     private final PairsService service;
 
-    @GetMapping(value = "/lastNotes")
+    @GetMapping(value = "/notes")
     @ResponseBody
     ResponseEntity<List> getLast(
             @RequestParam(value = "n", defaultValue = "1", required = false) int n,
@@ -25,12 +26,12 @@ public class PairsController {
         return ResponseEntity.ok(service.getLastNFilteredByDelta(symbol, n, delta));
     }
 
-    @GetMapping(value = "/newNote")
+    @PostMapping(value = "/notes")
     ResponseEntity<PairsModel> putToBase(
-            @RequestParam(value = "price") float price,
+            @RequestBody PairsModelLite modelLite,
             @PathVariable(value = "symbol") String symbol
     ) {
-        return ResponseEntity.ok((PairsModel) service.saveToDB(symbol, price));
+        return ResponseEntity.ok((PairsModel) service.saveToDB(symbol, modelLite.getPrice()));
     }
 
     @GetMapping(value = "/boxplot")

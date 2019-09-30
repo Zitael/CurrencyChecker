@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.alexandrov.currencychecker.dao.model.PairsModel;
+import ru.alexandrov.currencychecker.dao.model.PairsModelLite;
 import ru.alexandrov.currencychecker.service.PairsService;
 
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class PairsControllerTest {
 
         when(service.saveToDB(any(String.class), anyFloat())).thenReturn(last);
 
-        PairsModel model = controller.putToBase(2, "1").getBody();
+        PairsModel model = controller.putToBase(new PairsModelLite().setPrice(2), "1").getBody();
 
         verify(service, atLeastOnce()).saveToDB("1", 2);
         assertNotNull(model);
