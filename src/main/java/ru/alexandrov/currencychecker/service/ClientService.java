@@ -1,5 +1,5 @@
 package ru.alexandrov.currencychecker.service;
 
 public interface ClientService<T> {
-    T[] getPairs();
+    T[] getPairs(String symbol);
 }

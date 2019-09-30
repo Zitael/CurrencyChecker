@@ -11,7 +11,6 @@ import ru.alexandrov.currencychecker.dao.model.PairsModel;
 import ru.alexandrov.currencychecker.service.PairsService;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -39,8 +38,7 @@ public class PairsControllerTest {
         list.add(model1);
         list.add(model2);
         when(service.saveToDB("test1", 1)).thenReturn(model1);
-        when(service.getLastN("test1", 2)).thenReturn(list);
-        when(service.getFilteredByDelta("test1", 1)).thenReturn(Collections.singletonList(model2));
+        when(service.getLastNFilteredByDelta("test1", 2, 2)).thenReturn(list);
     }
 
     @Test
@@ -49,29 +47,15 @@ public class PairsControllerTest {
         list.add(new PairsModel());
         list.add(new PairsModel());
 
-        when(service.getLastN(any(String.class), anyInt())).thenReturn(list);
+        when(service.getLastNFilteredByDelta(any(String.class), anyInt(), anyFloat())).thenReturn(list);
 
-        List result = controller.getLast(1, "test").getBody();
+        List result = controller.getLast(1, 1,"test").getBody();
 
-        verify(service).getLastN("test", 1);
+        verify(service).getLastNFilteredByDelta("test", 1, 1);
         assertNotNull(result);
         assertEquals(result.size(), 2);
     }
 
-    @Test
-    public void getFilteredByDelta() {
-        List<PairsModel> list = new ArrayList<>();
-        list.add(new PairsModel());
-        list.add(new PairsModel());
-
-        when(service.getFilteredByDelta(any(String.class), anyFloat())).thenReturn(list);
-
-        List result = controller.getFilteredByDelta(1, "test").getBody();
-
-        verify(service).getFilteredByDelta("test", 1);
-        assertNotNull(result);
-        assertEquals(result.size(), 2);
-    }
 
     @Test
     public void putToBase() {

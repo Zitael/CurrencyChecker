@@ -3,6 +3,7 @@ package ru.alexandrov.currencychecker.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.alexandrov.currencychecker.dao.model.BoxPlotData;
 import ru.alexandrov.currencychecker.dao.model.PairsModel;
 import ru.alexandrov.currencychecker.service.PairsService;
 
@@ -16,21 +17,28 @@ public class PairsController {
 
     @GetMapping(value = "/lastNotes")
     @ResponseBody
-    ResponseEntity<List> getLast(@RequestParam(value = "n", defaultValue = "1", required = false) int n,
-                                 @PathVariable(value = "symbol") String symbol) {
-        return ResponseEntity.ok(service.getLastN(symbol, n));
-    }
-
-    @GetMapping(value = "/filteredNotes")
-    @ResponseBody
-    ResponseEntity<List> getFilteredByDelta(@RequestParam(value = "delta", defaultValue = "1", required = false) float delta,
-                                            @PathVariable(value = "symbol") String symbol) {
-        return ResponseEntity.ok(service.getFilteredByDelta(symbol, delta));
+    ResponseEntity<List> getLast(
+            @RequestParam(value = "n", defaultValue = "1", required = false) int n,
+            @RequestParam(value = "delta", defaultValue = "0", required = false) float delta,
+            @PathVariable(value = "symbol") String symbol
+    ) {
+        return ResponseEntity.ok(service.getLastNFilteredByDelta(symbol, n, delta));
     }
 
     @GetMapping(value = "/newNote")
-    ResponseEntity<PairsModel> putToBase(@RequestParam(value = "price") float price,
-                                         @PathVariable(value = "symbol") String symbol) {
+    ResponseEntity<PairsModel> putToBase(
+            @RequestParam(value = "price") float price,
+            @PathVariable(value = "symbol") String symbol
+    ) {
         return ResponseEntity.ok((PairsModel) service.saveToDB(symbol, price));
+    }
+
+    @GetMapping(value = "/boxplot")
+    ResponseEntity<BoxPlotData> getBoxPlotData(
+            @RequestParam(value = "from") String from,
+            @RequestParam(value = "to") String to,
+            @PathVariable(value = "symbol") String symbol
+    ) {
+        return ResponseEntity.ok((BoxPlotData) service.getBoxPlotData(symbol, from, to));
     }
 }

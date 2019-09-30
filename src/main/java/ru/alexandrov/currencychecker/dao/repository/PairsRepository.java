@@ -11,8 +11,7 @@ import java.util.List;
 @Repository
 public interface PairsRepository extends JpaRepository<PairsModel, Long> {
     List<PairsModel> findAllByCurrencyAndDeltaAfter(String currency, float delta);
-
+    List<PairsModel> findAllByCurrencyAndTimestampBetween(String currency, Long from, Long to);
     Page<PairsModel> findAllByCurrency(String currency, Pageable pageable);
-
     PairsModel findFirstByCurrencyOrderByIdDesc(String currency);
 }

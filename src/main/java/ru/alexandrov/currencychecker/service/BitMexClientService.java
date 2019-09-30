@@ -6,11 +6,13 @@ import ru.alexandrov.currencychecker.dao.model.PairsModelLite;
 
 @Service
 public class BitMexClientService implements ClientService<PairsModelLite> {
-    private String url = "https://www.bitmex.com/api/v1/instrument?symbol=XBTUSD&columns=midPrice";
     private RestTemplate restTemplate = new RestTemplate();
 
     @Override
-    public PairsModelLite[] getPairs() {
+    public PairsModelLite[] getPairs(final String symbol) {
+        String url = "https://www.bitmex.com/api/v1/instrument?symbol="
+                + symbol
+                + "&columns=midPrice";
         return restTemplate.getForObject(url, PairsModelLite[].class);
     }
 }

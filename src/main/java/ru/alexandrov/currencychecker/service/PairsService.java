@@ -2,10 +2,8 @@ package ru.alexandrov.currencychecker.service;
 
 import java.util.List;
 
-public interface PairsService<T> {
-    List<T> getLastN(String symbol, int count);
-
-    List<T> getFilteredByDelta(String symbol, float delta);
-
+public interface PairsService<T, K> {
+    List<T> getLastNFilteredByDelta(String symbol, int count, float delta);
     T saveToDB(String symbol, float price);
+    K getBoxPlotData(String symbol, String from, String to);
 }

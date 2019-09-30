@@ -42,7 +42,7 @@ public class PairsServiceImplTest {
 
         when(repository.findAllByCurrency(any(String.class), any(PageRequest.class))).thenReturn(page);
 
-        List result = service.getLastN("1", 2);
+        List result = service.getLastNFilteredByDelta("1", 2, 1);
 
         verify(repository, atLeastOnce()).findAllByCurrency(any(), any());
         assertEquals(2, result.size());
@@ -56,7 +56,7 @@ public class PairsServiceImplTest {
 
         when(repository.findAllByCurrencyAndDeltaAfter(any(), anyFloat())).thenReturn(list);
 
-        List result = service.getFilteredByDelta("1", 1);
+        List result = service.getLastNFilteredByDelta("1", 1, 1);
 
         verify(repository, atLeastOnce()).findAllByCurrencyAndDeltaAfter(any(), anyFloat());
         assertEquals(2, result.size());

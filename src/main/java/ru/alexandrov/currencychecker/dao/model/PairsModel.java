@@ -14,7 +14,7 @@ public class PairsModel {
     private Long id;
 
     @Basic
-    private String timestamp;
+    private Long timestamp;
     @Basic
     private String currency;
     @Column(name = "prev_price")
