@@ -9,9 +9,6 @@ import ru.alexandrov.currencychecker.dao.repository.PairsRepository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoField;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -25,8 +22,7 @@ public class PairsServiceImpl implements PairsService<PairsModel, BoxPlotData> {
 
     @Override
     public List<PairsModel> getLastNFilteredByDelta(String symbol, int count, float delta) {
-        List<PairsModel> filteredList = repository.findAllByCurrencyAndDeltaAfter(symbol.toUpperCase(), delta);
-        return filteredList.stream().sorted(Collections.reverseOrder()).limit(count).collect(Collectors.toList());
+        return repository.findAllByCurrencyAndDeltaAfter(symbol.toUpperCase(), delta, count);
     }
 
     @Override

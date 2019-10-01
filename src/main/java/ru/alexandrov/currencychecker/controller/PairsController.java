@@ -12,11 +12,11 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/pairs/{symbol}", produces = "application/json")
+@RequestMapping(value = "/pairs", produces = "application/json")
 public class PairsController {
     private final PairsService service;
 
-    @GetMapping(value = "/notes")
+    @GetMapping(value = "/{symbol}")
     @ResponseBody
     ResponseEntity<List> getLast(
             @RequestParam(value = "n", defaultValue = "1", required = false) int n,
@@ -26,15 +26,15 @@ public class PairsController {
         return ResponseEntity.ok(service.getLastNFilteredByDelta(symbol, n, delta));
     }
 
-    @PostMapping(value = "/notes")
-    ResponseEntity<PairsModel> putToBase(
+    @PutMapping(value = "/{symbol}")
+    ResponseEntity<PairsModel> saveToBase(
             @RequestBody PairsModelLite modelLite,
             @PathVariable(value = "symbol") String symbol
     ) {
         return ResponseEntity.ok((PairsModel) service.saveToDB(symbol, modelLite.getPrice()));
     }
 
-    @GetMapping(value = "/boxplot")
+    @GetMapping(value = "/{symbol}/boxplot")
     ResponseEntity<BoxPlotData> getBoxPlotData(
             @RequestParam(value = "from") String from,
             @RequestParam(value = "to") String to,

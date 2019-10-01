@@ -54,11 +54,11 @@ public class PairsServiceImplTest {
         list.add(new PairsModel());
         list.add(new PairsModel());
 
-        when(repository.findAllByCurrencyAndDeltaAfter(any(), anyFloat())).thenReturn(list);
+        when(repository.findAllByCurrencyAndDeltaAfter(any(), anyFloat(), anyInt())).thenReturn(list);
 
         List result = service.getLastNFilteredByDelta("1", 1, 1);
 
-        verify(repository, atLeastOnce()).findAllByCurrencyAndDeltaAfter(any(), anyFloat());
+        verify(repository, atLeastOnce()).findAllByCurrencyAndDeltaAfter(any(), anyFloat(), anyInt());
         assertEquals(2, result.size());
     }
 
