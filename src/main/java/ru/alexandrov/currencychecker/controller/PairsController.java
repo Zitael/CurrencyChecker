@@ -1,12 +1,14 @@
 package ru.alexandrov.currencychecker.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.alexandrov.currencychecker.dao.model.BoxPlotData;
 import ru.alexandrov.currencychecker.dao.model.PairsModel;
 import ru.alexandrov.currencychecker.dao.model.PairsModelLite;
-import ru.alexandrov.currencychecker.service.PairsService;
+import ru.alexandrov.currencychecker.service.MyException;
+import ru.alexandrov.currencychecker.service.pairs.PairsService;
 
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class PairsController {
 
     @GetMapping(value = "/{symbol}")
     @ResponseBody
-    ResponseEntity<List> getLast(
+    ResponseEntity getLast(
             @RequestParam(value = "n", defaultValue = "1", required = false) int n,
             @RequestParam(value = "delta", defaultValue = "0", required = false) float delta,
             @PathVariable(value = "symbol") String symbol
@@ -27,7 +29,7 @@ public class PairsController {
     }
 
     @PutMapping(value = "/{symbol}")
-    ResponseEntity<PairsModel> saveToBase(
+    ResponseEntity saveToBase(
             @RequestBody PairsModelLite modelLite,
             @PathVariable(value = "symbol") String symbol
     ) {
@@ -35,11 +37,15 @@ public class PairsController {
     }
 
     @GetMapping(value = "/{symbol}/boxplot")
-    ResponseEntity<BoxPlotData> getBoxPlotData(
+    ResponseEntity getBoxPlotData(
             @RequestParam(value = "from") String from,
             @RequestParam(value = "to") String to,
             @PathVariable(value = "symbol") String symbol
     ) {
-        return ResponseEntity.ok((BoxPlotData) service.getBoxPlotData(symbol, from, to));
+        try {
+            return ResponseEntity.ok((BoxPlotData) service.getBoxPlotData(symbol, from, to));
+        } catch (MyException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }

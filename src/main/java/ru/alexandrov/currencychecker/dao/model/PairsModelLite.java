@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
+
 @Data
 @Accessors(chain = true)
 public class PairsModelLite {
@@ -14,5 +16,5 @@ public class PairsModelLite {
     @JsonProperty(value = "timestamp")
     private String timestamp;
     @JsonProperty(value = "midPrice")
-    private float price;
+    private BigDecimal price;
 }

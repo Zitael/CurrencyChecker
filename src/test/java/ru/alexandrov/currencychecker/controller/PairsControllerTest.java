@@ -9,8 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.alexandrov.currencychecker.dao.model.PairsModel;
 import ru.alexandrov.currencychecker.dao.model.PairsModelLite;
-import ru.alexandrov.currencychecker.service.PairsService;
+import ru.alexandrov.currencychecker.service.pairs.PairsService;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,14 +32,14 @@ public class PairsControllerTest {
     public void setUp() {
         PairsModel model1 = new PairsModel();
         model1.setCurrency("test1");
-        model1.setLastPrice(1);
+        model1.setLastPrice(new BigDecimal(1));
         PairsModel model2 = new PairsModel();
         model2.setCurrency("test1");
-        model2.setLastPrice(2);
+        model2.setLastPrice(new BigDecimal(2));
         List<PairsModel> list = new ArrayList<>();
         list.add(model1);
         list.add(model2);
-        when(service.saveToDB("test1", 1)).thenReturn(model1);
+        when(service.saveToDB("test1", new BigDecimal(1))).thenReturn(model1);
         when(service.getLastNFilteredByDelta("test1", 2, 2)).thenReturn(list);
     }
 
@@ -50,7 +51,7 @@ public class PairsControllerTest {
 
         when(service.getLastNFilteredByDelta(any(String.class), anyInt(), anyFloat())).thenReturn(list);
 
-        List result = controller.getLast(1, 1,"test").getBody();
+        List result = (List) controller.getLast(1, 1,"test").getBody();
 
         verify(service).getLastNFilteredByDelta("test", 1, 1);
         assertNotNull(result);
@@ -61,13 +62,13 @@ public class PairsControllerTest {
     @Test
     public void putToBase() {
         PairsModel last = new PairsModel();
-        last.setLastPrice(1);
+        last.setLastPrice(new BigDecimal(1));
 
-        when(service.saveToDB(any(String.class), anyFloat())).thenReturn(last);
+        when(service.saveToDB(any(), any())).thenReturn(last);
 
-        PairsModel model = controller.putToBase(new PairsModelLite().setPrice(2), "1").getBody();
+        PairsModel model = (PairsModel) controller.saveToBase(new PairsModelLite().setPrice(new BigDecimal(2)), "1").getBody();
 
-        verify(service, atLeastOnce()).saveToDB("1", 2);
+        verify(service, atLeastOnce()).saveToDB("1", new BigDecimal(2));
         assertNotNull(model);
     }
 }

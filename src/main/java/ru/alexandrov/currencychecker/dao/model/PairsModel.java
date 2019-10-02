@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "Pairs")
@@ -20,11 +21,11 @@ public class PairsModel {
     @Basic
     private String currency;
     @Column(name = "prev_price")
-    private float prevPrice;
+    private BigDecimal prevPrice;
     @Basic
-    private float delta;
+    private BigDecimal delta;
     @Column(name = "last_price")
-    private float lastPrice;
+    private BigDecimal lastPrice;
     @Basic
-    private int increased;
+    private boolean increased;
 }

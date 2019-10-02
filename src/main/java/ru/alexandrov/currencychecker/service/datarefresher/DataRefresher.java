@@ -1,10 +1,12 @@
-package ru.alexandrov.currencychecker.service;
+package ru.alexandrov.currencychecker.service.datarefresher;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.alexandrov.currencychecker.dao.model.PairsModelLite;
+import ru.alexandrov.currencychecker.service.client.ClientService;
+import ru.alexandrov.currencychecker.service.pairs.PairsService;
 
 import java.util.Collections;
 import java.util.List;
