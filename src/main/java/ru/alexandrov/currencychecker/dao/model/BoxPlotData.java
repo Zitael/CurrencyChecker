@@ -13,5 +13,4 @@ public class BoxPlotData {
     private BigDecimal median75;
     private BigDecimal min;
     private BigDecimal max;
-    private String message;
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.alexandrov.currencychecker.dao.model.BoxPlotData;
 import ru.alexandrov.currencychecker.dao.model.PairsModel;
 import ru.alexandrov.currencychecker.dao.repository.PairsRepository;
-import ru.alexandrov.currencychecker.service.CalculationService;
+import ru.alexandrov.currencychecker.service.calculation.CalculationService;
 import ru.alexandrov.currencychecker.service.MyException;
 
 import java.math.BigDecimal;
@@ -24,8 +24,12 @@ public class PairsServiceImpl implements PairsService<PairsModel, BoxPlotData> {
     private final CalculationService calculationService;
 
     @Override
-    public List<PairsModel> getLastNFilteredByDelta(String symbol, int count, float delta) {
-        return repository.findAllByCurrencyAndDeltaAfter(symbol.toUpperCase(), delta, count);
+    public List<PairsModel> getLastNFilteredByDelta(String symbol, int count, float delta) throws MyException {
+        List<PairsModel> result = repository.findAllByCurrencyAndDeltaAfter(symbol.toUpperCase(), delta, count);
+        if (result == null || result.isEmpty()){
+            throw new MyException("Not found");
+        }
+        return result;
     }
 
     @Override

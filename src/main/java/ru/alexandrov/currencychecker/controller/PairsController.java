@@ -10,8 +10,6 @@ import ru.alexandrov.currencychecker.dao.model.PairsModelLite;
 import ru.alexandrov.currencychecker.service.MyException;
 import ru.alexandrov.currencychecker.service.pairs.PairsService;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/pairs", produces = "application/json")
@@ -21,26 +19,30 @@ public class PairsController {
     @GetMapping(value = "/{symbol}")
     @ResponseBody
     ResponseEntity getLast(
+            @PathVariable(value = "symbol") String symbol,
             @RequestParam(value = "n", defaultValue = "1", required = false) int n,
-            @RequestParam(value = "delta", defaultValue = "0", required = false) float delta,
-            @PathVariable(value = "symbol") String symbol
+            @RequestParam(value = "delta", defaultValue = "0", required = false) float delta
     ) {
-        return ResponseEntity.ok(service.getLastNFilteredByDelta(symbol, n, delta));
+        try {
+            return ResponseEntity.ok(service.getLastNFilteredByDelta(symbol, n, delta));
+        } catch (MyException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @PutMapping(value = "/{symbol}")
     ResponseEntity saveToBase(
-            @RequestBody PairsModelLite modelLite,
-            @PathVariable(value = "symbol") String symbol
+            @PathVariable(value = "symbol") String symbol,
+            @RequestBody PairsModelLite modelLite
     ) {
         return ResponseEntity.ok((PairsModel) service.saveToDB(symbol, modelLite.getPrice()));
     }
 
     @GetMapping(value = "/{symbol}/boxplot")
     ResponseEntity getBoxPlotData(
+            @PathVariable(value = "symbol") String symbol,
             @RequestParam(value = "from") String from,
-            @RequestParam(value = "to") String to,
-            @PathVariable(value = "symbol") String symbol
+            @RequestParam(value = "to") String to
     ) {
         try {
             return ResponseEntity.ok((BoxPlotData) service.getBoxPlotData(symbol, from, to));

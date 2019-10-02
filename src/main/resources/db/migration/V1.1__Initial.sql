@@ -8,4 +8,3 @@ CREATE TABLE Pairs
     last_price NUMERIC,
     increased BOOLEAN
 );
-it

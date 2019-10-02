@@ -1,8 +1,9 @@
-package ru.alexandrov.currencychecker.service;
+package ru.alexandrov.currencychecker.service.calculation;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.alexandrov.currencychecker.dao.model.BoxPlotData;
+import ru.alexandrov.currencychecker.service.MyException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -11,7 +12,10 @@ import java.util.List;
 @Slf4j
 @Service
 public class CalculationService {
-    public BoxPlotData getBoxPlotDataByListOfValues(List<BigDecimal> prices) {
+    public BoxPlotData getBoxPlotDataByListOfValues(List<BigDecimal> prices) throws MyException {
+        if (prices == null || prices.isEmpty()){
+            throw new MyException("No data for BoxPlot");
+        }
         int minIndex = 0;
         int maxIndex = prices.size() - 1;
         int median25index;
@@ -46,7 +50,7 @@ public class CalculationService {
         result.setMedian25(prices.get(median25index));
         result.setMedian50(
                 (prices.get(median50index1).add(prices.get(median50index2)))
-                        .divide(new BigDecimal(2), RoundingMode.HALF_UP));
+                        .divide(new BigDecimal(2), 2, RoundingMode.HALF_UP));
         result.setMedian75(prices.get(median75index));
         return result;
     }
