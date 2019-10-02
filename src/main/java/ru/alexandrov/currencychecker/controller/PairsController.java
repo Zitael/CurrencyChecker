@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.alexandrov.currencychecker.dao.model.BoxPlotData;
+import ru.alexandrov.currencychecker.dao.model.ErrorResponse;
 import ru.alexandrov.currencychecker.dao.model.PairsModel;
 import ru.alexandrov.currencychecker.dao.model.PairsModelLite;
 import ru.alexandrov.currencychecker.service.MyException;
@@ -26,7 +27,7 @@ public class PairsController {
         try {
             return ResponseEntity.ok(service.getLastNFilteredByDelta(symbol, n, delta));
         } catch (MyException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
         }
     }
 
@@ -35,7 +36,11 @@ public class PairsController {
             @PathVariable(value = "symbol") String symbol,
             @RequestBody PairsModelLite modelLite
     ) {
-        return ResponseEntity.ok((PairsModel) service.saveToDB(symbol, modelLite.getPrice()));
+        try {
+            return ResponseEntity.ok((PairsModel) service.saveToDB(symbol, modelLite.getPrice(), modelLite.getTimestamp()));
+        } catch (MyException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        }
     }
 
     @GetMapping(value = "/{symbol}/boxplot")

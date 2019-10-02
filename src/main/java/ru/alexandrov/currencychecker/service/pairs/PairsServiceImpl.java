@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.alexandrov.currencychecker.dao.model.BoxPlotData;
 import ru.alexandrov.currencychecker.dao.model.PairsModel;
 import ru.alexandrov.currencychecker.dao.repository.PairsRepository;
-import ru.alexandrov.currencychecker.service.calculation.CalculationService;
 import ru.alexandrov.currencychecker.service.MyException;
+import ru.alexandrov.currencychecker.service.calculation.CalculationService;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -26,19 +26,26 @@ public class PairsServiceImpl implements PairsService<PairsModel, BoxPlotData> {
     @Override
     public List<PairsModel> getLastNFilteredByDelta(String symbol, int count, float delta) throws MyException {
         List<PairsModel> result = repository.findAllByCurrencyAndDeltaAfter(symbol.toUpperCase(), delta, count);
-        if (result == null || result.isEmpty()){
+        if (result == null || result.isEmpty()) {
             throw new MyException("Not found");
         }
         return result;
     }
 
     @Override
-    public PairsModel saveToDB(String symbol, BigDecimal price) {
+    public PairsModel saveToDB(String symbol, BigDecimal price, String timestamp) throws MyException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
         PairsModel result = new PairsModel();
-        PairsModel last = repository.findFirstByCurrencyOrderByIdDesc(symbol.toUpperCase());
-        result.setTimestamp(System.currentTimeMillis());
+        try {
+            result.setTimestamp(format.parse(timestamp));
+        } catch (ParseException e) {
+            throw new MyException("Wrong data");
+        }
+
         result.setCurrency(symbol.toUpperCase());
         result.setLastPrice(price);
+
+        PairsModel last = repository.findFirstByCurrencyOrderByIdDesc(symbol.toUpperCase());
         if (last == null) {
             result.setPrevPrice(null);
             result.setDelta(null);
@@ -57,15 +64,15 @@ public class PairsServiceImpl implements PairsService<PairsModel, BoxPlotData> {
 
     @Override
     public BoxPlotData getBoxPlotData(String symbol, String from, String to) throws MyException {
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy'T'HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy'T'HH:mm:ss.SSS");
         List<PairsModel> list;
         try {
             Date dateFrom = format.parse(from);
             Date dateTo = format.parse(to);
             list = repository.findAllByCurrencyAndTimestampBetween(
                     symbol,
-                    dateFrom.getTime(),
-                    dateTo.getTime()
+                    dateFrom,
+                    dateTo
             );
         } catch (ParseException e) {
             log.error("invalid dates");

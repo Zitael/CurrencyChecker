@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "Pairs")
@@ -17,7 +18,7 @@ public class PairsModel {
     private Long id;
 
     @Basic
-    private Long timestamp;
+    private Date timestamp;
     @Basic
     private String currency;
     @Column(name = "prev_price")

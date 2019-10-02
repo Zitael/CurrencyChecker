@@ -1,7 +1,7 @@
 CREATE TABLE Pairs
 (
     id  SERIAL NOT NULL PRIMARY KEY,
-    timestamp BIGINT,
+    timestamp TIMESTAMP,
     currency VARCHAR(255),
     prev_price NUMERIC,
     delta NUMERIC,

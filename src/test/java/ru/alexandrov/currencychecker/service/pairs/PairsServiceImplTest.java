@@ -44,14 +44,14 @@ public class PairsServiceImplTest {
     }
 
     @Test
-    public void saveToDB() {
+    public void saveToDB() throws MyException {
         PairsModel last = new PairsModel();
         last.setLastPrice(BigDecimal.ONE);
 
         when(repository.findFirstByCurrencyOrderByIdDesc("1")).thenReturn(last);
         when(repository.save(any(PairsModel.class))).then(returnsFirstArg());
 
-        PairsModel model = service.saveToDB("1", BigDecimal.TEN);
+        PairsModel model = service.saveToDB("1", BigDecimal.TEN, "11-11-1111T11:11:11.111");
 
         verify(repository, atLeastOnce()).findFirstByCurrencyOrderByIdDesc(any());
         assertNotNull(model);

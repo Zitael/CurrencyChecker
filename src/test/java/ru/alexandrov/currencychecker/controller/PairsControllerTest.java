@@ -61,16 +61,16 @@ public class PairsControllerTest {
     }
 
     @Test
-    public void saveToBase() {
+    public void saveToBase() throws MyException {
         PairsModel last = new PairsModel();
         last.setLastPrice(BigDecimal.ONE);
 
-        when(service.saveToDB(any(), any())).thenReturn(last);
+        when(service.saveToDB(any(), any(), any())).thenReturn(last);
 
         ResponseEntity result = controller.saveToBase("1", new PairsModelLite().setPrice(BigDecimal.TEN));
         PairsModel model = (PairsModel) result.getBody();
 
-        verify(service, atLeastOnce()).saveToDB("1", BigDecimal.TEN);
+        verify(service, atLeastOnce()).saveToDB(any(), any(), any());
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertNotNull(model);
         assertEquals(last, model);
