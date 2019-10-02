@@ -9,8 +9,6 @@ import ru.alexandrov.currencychecker.service.MyException;
 import ru.alexandrov.currencychecker.service.client.ClientService;
 import ru.alexandrov.currencychecker.service.pairs.PairsService;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,7 +32,9 @@ public class DataRefresher {
                         log.error("Cant save data, " + e.getMessage());
                     }
                 }
-            } else log.error("Error refreshing data");
+            } else {
+                log.error("Error refreshing data");
+            }
         }
     }
 }

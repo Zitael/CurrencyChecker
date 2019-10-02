@@ -1,7 +1,6 @@
 package ru.alexandrov.currencychecker.service.pairs;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.alexandrov.currencychecker.dao.model.BoxPlotData;
 import ru.alexandrov.currencychecker.dao.model.PairsModel;
@@ -16,7 +15,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PairsServiceImpl implements PairsService<PairsModel, BoxPlotData> {
@@ -75,7 +73,6 @@ public class PairsServiceImpl implements PairsService<PairsModel, BoxPlotData> {
                     dateTo
             );
         } catch (ParseException e) {
-            log.error("invalid dates");
             throw new MyException("invalid dates");
         }
         if (list.isEmpty()) {
