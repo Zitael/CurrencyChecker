@@ -62,7 +62,7 @@ public class PairsServiceImpl implements PairsService<PairsModel, BoxPlotData> {
 
     @Override
     public BoxPlotData getBoxPlotData(String symbol, String from, String to) throws MyException {
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy'T'HH:mm:ss.SSS");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
         List<PairsModel> list;
         try {
             Date dateFrom = format.parse(from);
